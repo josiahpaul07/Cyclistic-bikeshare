@@ -1,0 +1,324 @@
+---
+title: "Untitled"
+author: "Josiah Paul"
+date: "`r Sys.Date()`"
+output: pdf_document
+---
+
+### Introduction
+
+#### About Cyclistic
+In 2016, Cyclistic launched a successful bike-share offering. Since then, the program has grown to a fleet of 5,824 bicycles that are geotracked and locked into a network of 692 stations across Chicago. The bikes can be unlocked from one station and returned to any other station in the system anytime.
+
+#### My role
+I'm a junior data analyst working in the marketing analytics team at Cyclistics, a bike-share company in Chicago. The director of marketing believes the company's future success depends on maximizing the number of annual memberships. Therefore, The data analytics team want to understand how casual riders and annual members use Cyclistic bikes differently. From these insights, the team will design a new marketing strategy to convert casual members into annual members. </br>
+   In order to answer the key business questions, I will follow the step of data analysis process.
+
+### Data Analysis Processes
+* **Ask** - Define the problem and understand stakeholders expectation.
+* **Prepare**- Collecting and storing data for analysis.
+* **Process** - Cleaning and transforming data to a useful format.
+* **Analyse** - Using R to organize information to be able to draw useful conclusion and draw informed decision making.
+* **Share** - Sharing data insights through data visualizations.
+* **Act** - Solving problems through insights gotten from the analysis.
+
+
+### Ask
+ **Business Task** Cyclistic Executive Team want to maximize their current customers base by converting riders of single_ride passes and full_day passes to riders of annual membership. </br>
+ **Stakeholders** </br>
+ Primary stakeholder- Cyclistic Executive Team </br>
+ Secondary stakeholder- Lily Moreno- Director of Marketing</br>
+ 
+#### The three questions asked were:
+* How do annual members and casual riders use Cyclistic bikes differently? 
+* Why would casual riders buy Cyclistic annual memberships?
+* How can Cyclistic use digital media to influence casual riders to become members? </br>
+
+*I was assigned by the Cyclistic Marketing Analytics Team to answer the first question "How do annual members and casual riders use Cyclistic bikes differently?"*. In my analysis, I need to articulate how annual and casual members use Cyclistic Bike-share differently and identify the trend of how both set of customers use bike to be able to provide contextual recommendations on converting casual members to annual members. </br>
+
+#### Scope of Work(SOW)
+* ***Who collected the data?*** Cyclistic Bike-share collects data from its customers. I am using Cyclistic historical data. 
+* ***What is the data impact?*** The data gives insight of how Cyclistic riders in Chicago ride bike.
+* ***Where is the data origin?*** The data was taken from Cyclistic riders who live in Chicago and was stored on their database.
+* ***When was the data created and collected?*** For my analysis I needed the most recent data of a year, I collected data of 2021 October till 2022 September. 
+* ***Why was this data set created?*** To track and analyse Cyclistic riders data to gain insights on how to foster Cyclistic growth and customer satisfaction. 
+* ***How was the data created?*** The data was gotten from the bikes since all Cyclistic bikes are geotracked
+
+
+### Prepare
+* ***Where the data is located*** The data was made available on this [link](https://divvy-tripdata.s3.amazonaws.com/index.html) 
+* ***How the data is organized?*** The data is a structured data so it is ordered in rows and columns. It is a long data with 13 columns and 5883043 rows 
+* ***verifying data credibility*** The data is credible has we used all Cyclistics historical trip data gotten from every customer riders. </br>
+ **Does the data ROCCC?** </br>
+ ***R***eliable-The data is reliable, it is accurate, complete and not biased. </br> 
+ ***O***riginal- The data is original has it is gotten directly from Cyclistic Bike-share users </br>
+ ***C***omprehensive- The data is complete to answer the question "How do annual members and casual riders use Cyclistic bikes differently?". </br>
+ ***C***urrent- The data is current as it was from October 2021 till September 2022. </br>
+ ***C***ited- The data is from a vetted source "Cyclistic Analystic Team"
+ The data is original has it is gotten directly from Cyclistic Bike-share users.
+* ***Addressing licensing, privacy, security, and accessibility?*** 
+ The data has been made available by Motivate International Inc. under this [license](https://www.divvybikes.com/data-license-agreement). 
+* ***Verifying data’s integrity?*** The data passed the data ethics test. It is collected with the consent of users. Personal information of users are preserved. 
+* ***How the data help in answering the question*** The data contain all information needed to answer the question, "How do annual members and casual riders use Cyclistic bikes differently?" 
+* ***Are there any problems with the data?*** No, it is ethical and non-bias
+
+### Process
+* ***Why I chose R for analyzing and cleaning the data*** R programming language and RStudio was use because the data is too large to commpute on Excel spreadsheet. Also it is easier analysing and visualising on R than SQL. The R packages used are: dplyr, lubridate, stringr, tibble, readr, tidyverse and knitr. </br>
+Loading packages
+```{r loading packages, message=FALSE, warning=FALSE}
+library(dplyr)
+library(lubridate)
+library(stringr)
+library(tibble)
+library(readr)
+library(tidyverse)
+library(knitr)
+```
+Loading data
+```{r reding all csv files, message=FALSE, warning=FALSE}
+#To print the working directory file path
+getwd()
+
+# to comfirm the existence of our file in the right path
+file.exists("Excel/1st project/202109-divvy-tripdata.csv")
+file.exists("Excel/1st project/202110-divvy-tripdata.csv")
+file.exists("Excel/1st project/202111-divvy-tripdata.csv")
+file.exists("Excel/1st project/202112-divvy-tripdata.csv")
+file.exists("Excel/1st project/202201-divvy-tripdata.csv")
+file.exists("Excel/1st project/202202-divvy-tripdata.csv")
+file.exists("Excel/1st project/202203-divvy-tripdata.csv")
+file.exists("Excel/1st project/202204-divvy-tripdata.csv")
+file.exists("Excel/1st project/202205-divvy-tripdata.csv")
+file.exists("Excel/1st project/202206-divvy-tripdata.csv")
+file.exists("Excel/1st project/202207-divvy-tripdata.csv")
+file.exists("Excel/1st project/202208-divvy-tripdata.csv")
+ 
+#with the help of the readr package, reading a csv file using the read_csv command
+df202109 <- read_csv("Excel/1st project/202109-divvy-tripdata.csv")
+df202110 <- read_csv("Excel/1st project/202110-divvy-tripdata.csv")
+df202111 <- read_csv("Excel/1st project/202111-divvy-tripdata.csv")
+df202112 <- read_csv("Excel/1st project/202112-divvy-tripdata.csv")
+df202201 <- read_csv("Excel/1st project/202201-divvy-tripdata.csv")
+df202202 <- read_csv("Excel/1st project/202202-divvy-tripdata.csv")
+df202203 <- read_csv("Excel/1st project/202203-divvy-tripdata.csv")
+df202204 <- read_csv("Excel/1st project/202204-divvy-tripdata.csv")
+df202205 <- read_csv("Excel/1st project/202205-divvy-tripdata.csv")
+df202206 <- read_csv("Excel/1st project/202206-divvy-tripdata.csv")
+df202207 <- read_csv("Excel/1st project/202207-divvy-tripdata.csv")
+df202208 <- read_csv("Excel/1st project/202208-divvy-tripdata.csv")
+
+```
+
+* ***Ensuring the data's integrity***
+ 1. checking for spelling errors in the string values li>
+ 2. checking if any entry has duplicate values li>
+ 3. checking for null values  li>
+ 4. computing  the duration of ride by finding the difference of the start_at and end_at. </br>
+ 
+The data are in multiple files containing citibike data for each month, The data of 12 months were collected to be analysed from September 2021 till August 2022. All this month files were merged to be able to carry out a year analysis on citibike bike riders.
+```{r merging all 12 months data into a one year table}
+citibike_data <- rbind(df202109, df202110, df202111, df202112, df202201, df202202, 
+                       df202203, df202204, df202205, df202206, df202207, df202208)
+
+```
+
+ **checking for spelling errors in the string values**
+```{r}
+# Checking if any entry of the rideabletype was spelt wrong
+citibike_data %>%
+  select(., rideable_type) %>%
+  group_by(., rideable_type) %>%
+  summarise()
+# no spelling error as only 3 bike types exist
+
+# Checking for if any entry of the member_casual was spelt wrong
+citibike_data %>%
+  select(., member_casual) %>%
+  group_by(., member_casual) %>%
+  summarise()
+# no spelling error as only 2 customer types exist
+
+```
+
+ **checking if any entry has duplicate values**
+```{r}
+citibike_data %>% 
+  group_by(ride_id) %>% 
+  summarise(count = n_distinct(ride_id)) %>% 
+  filter(count > 1) 
+# I tested if we have any duplicate values, the test came out negative. We grouped by ride_id since it is said to be with unique values
+
+```
+
+**computing  the duration of ride by finding the difference of the start_at and end_at**
+```{r}
+citibike <- citibike_data %>% select(., ride_id, started_at, ended_at, rideable_type, start_station_id, end_station_id, member_casual, start_lng, start_lat) %>%
+  mutate(., duration = ended_at - started_at)
+```
+ 
+* ***Data Cleaning***
+ 1. cleaning the data set (formatting data types) li>
+ 2. cleaning the negative duration value
+
+**cleaning the data set (formatting data types)**
+```{r}
+summary(citibike)
+# The duration column data type 'datediff' can not be worked with so it has to be changed to a numeric type
+citibike$duration <- as.numeric(citibike$duration)
+
+summary(citibike)
+# some irregularities where found in the data as the min value is -8245 and max value is 2442301
+```
+
+
+**cleaning the negative duration value**
+For this process we try as much as possible not to loose any value in the dataset. Instead of deleting the negative durations we seperated it from the entire dataset and worked on it then merged it back with the whole dateset to get an wholesome dateset.
+```{r cleaning negative value}
+# viewing the duration of negative value
+citibike %>%
+  select(., started_at, ended_at, duration) %>%
+  filter(., duration < 0)
+
+# To clean the data, the negative value is separated from the positive value
+citibike_pos <- citibike %>% 
+  select(., ride_id, started_at, ended_at, duration,rideable_type,
+         start_station_id, end_station_id, member_casual, start_lng, start_lat) %>%
+  filter(., duration >= 0)
+
+#
+citibike_neg <- citibike %>%
+  select(., ride_id, started_at = ended_at, ended_at = started_at, duration, rideable_type, start_station_id, end_station_id, member_casual, start_lng, start_lat) %>%
+  filter(., duration < 0)
+
+# Then it was joined together after cleaning
+citibike_abs <- rbind(citibike_pos, citibike_neg) %>%
+  select(., ride_id, started_at, ended_at, duration, rideable_type,
+         start_station_id, end_station_id, member_casual, start_lng, start_lat) %>%
+  mutate(., dur = ended_at - started_at) 
+# The dur column data type 'datediff' can not be worked with so it has to be changed to a numeric type
+citibike_abs$dur <- as.numeric(citibike_abs$dur)
+
+```
+
+* ***How can you verify that your data is clean and ready to analyze?***
+```{r}
+# Checking if the problem as been resolved
+citibike_abs %>% 
+  filter(., dur < 0)
+# There is no negative duration
+```
+
+
+### Exploratory Data Analysis
+Note: This analysis was made necessary to check how casual and annual members use Citibike bike differently. </br>
+1. Checking for monthly trend in bike usage </br>
+2. Checking for weekday bike usage </br>
+3. Checking for hour trend in bike usage </br>
+4. Checking average ride duration of casual and annual members </br>
+
+Extracting month, weekday and hour from the started_at(datettime) column
+```{r}
+# A column of  month was made and the month value was extracted from the started_at column
+citibike_abs$month <- month(citibike_abs$started_at, label = TRUE)
+
+# A column of weekday was made and the weekday value was extracted from the started_at column
+citibike_abs$weekday <- wday(citibike_abs$started_at, label = TRUE)
+
+# A column of  hour was made and the hour value was extracted from the started_at column
+citibike_abs$hour <- hour(ymd_hms(citibike_abs$started_at))
+
+citibike_analyze <- citibike_abs %>%
+  select(., ride_id, started_at, rideable_type, dur, member_casual, month, weekday, hour, start_lng, start_lat)
+citibike_analyze$dur <- as.numeric(citibike_analyze$dur)
+# extracting the date out of the datetime format
+citibike_analyze$date <- as.Date(citibike_analyze$started_at)
+
+# adding the date column to the data
+citibike_analyze <- citibike_analyze %>%
+  select(., date, started_at ,rideable_type, dur, member_casual, month, weekday, hour)
+
+```
+
+ **Checking for monthly trend in bike usage**
+```{r monthly trend, message=FALSE, paged.print=FALSE}
+citibike_analyze %>%
+  select(., member_casual, month) %>%
+  group_by(., member_casual, month) %>%
+  summarise(., month_count = n()) %>%
+  arrange(., desc(month_count)) 
+
+```
+
+ **Checking for weekday bike usage**
+```{r weekday usage, message=FALSE}
+# the amount of times casual and members frequently use bikes during the weeks
+weekday_group <- citibike_analyze %>%
+  select(., member_casual, weekday) %>%
+  group_by(., member_casual, weekday) %>%
+  summarise(., weekday_count = n())
+```
+Grouping number of rider by weekday
+```{r weekday table}
+kable(weekday_group)
+```
+Plotting weekday_group
+```{r echo=TRUE}
+ggplot(weekday_group, aes(weekday, weekday_count, fill = member_casual)) +
+  geom_col(position = "dodge") 
+```
+
+
+ **Checking for hour trend in bike usage** 
+```{r analysis by hour, message=FALSE}
+ride_per_hour <- citibike_analyze %>%
+  select(., member_casual, hour) %>%
+  group_by(., member_casual, hour) %>%
+  summarise(., hour_count = n()) %>%
+  arrange(., desc(hour_count))
+```
+Grouping number of rider by hour
+```{r hour table} 
+kable(ride_per_hour)
+```
+Plotting ride_per_hour
+```{r echo=TRUE}
+ggplot(ride_per_hour, aes(hour, hour_count, color = member_casual)) +
+  geom_line()
+```
+
+
+ **Checking average ride duration of casual and annual members**
+```{r message=FALSE}
+ride_per_day <- citibike_analyze %>%
+  select(.,date, member_casual, dur) %>%
+  group_by(.,date, member_casual) %>%
+  summarise(., avg_dur = mean(dur)) %>%
+  arrange(., date)
+```
+Showing the trend of average bike riders duration per day
+```{r echo=TRUE}
+ggplot(ride_per_day, aes(date, avg_dur, color = member_casual)) +
+  geom_line()
+```
+
+### Share
+
+```{r}
+write_csv(citibike_analyze, "citibike.csv")
+```
+The cleaned data was exported out for further visualization and analysis in Tableau [see link](https://public.tableau.com/views/citibikeanalysis_16663242569640/Dashboard1?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link)
+
+### Act
+
+* **Insight**
+1) Members tend to use bike more during the week days to commute to work and the use bikes the least during weekends </br>
+2) Casual members tends to use bike as opposed to the members more on weekends and the least on weekdays. This Trends shows that most people that have membership are people that often use the bike to commute to work hence, the large amount of people that use the bike during the weekdays. On the contrary, casual riders most likely use bikes for liesure and casual errands.</br>
+3) Backing our earlier claim that a huge chunk of member use cyclistic to commute to work. Annual members use bikes to commute to work that why there is increase in bike usage from 7am to 9 am see(ride_per_hour plot).
+
+* **Recommendation** 
+1) Since casual riders rides bike mostly during weekends I suggest a mouth watering weekend discount on weekends that will only be applicable to only annual members. </br>
+2) There should be dailly goal of minute of rides a person ought to make to keep fit and healthy, this will increase the frequency at which individuals use bike thereby causing them to subscribe for annual membership. </br>
+
+* **Conclusion**
+To provide a concrete solution to converting casual members to annual members the other questions (a) Why would casual members by Cylistic annual members? and (b) How can Cyclistic use digital media to influence casual riders to become members? must be appropiately answered. With my insights and recommendations listing how casual riders use bike differently from annual members, combining these recommendations with the other analysis will give a concrete strategy of converting casual members to annual members. </br>
+I made a visualisation on tableau [click here](https://public.tableau.com/views/citibikeanalysis_16663242569640/Dashboard1?:language=en-US&publish=yes&:display_count=n&:origin=viz_share_link).
